@@ -38,7 +38,7 @@ A comprehensive web-based parking management system built with Spring Boot that 
 - Automatic space allocation with preference for handicapped spaces
 - Real-time availability tracking across all floors
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Backend
 - **Java 17+**
@@ -235,5 +235,6 @@ For any queries or suggestions, please reach out to:
 - Project Link: [GitHub](https://github.com/subhiksha1196/smart-parking-system)
 
 ---
+
 
 ⭐ Star this repo if you find it helpful!
