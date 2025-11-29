@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+        
+        .floor {
+            margin-bottom: 50px;
+        }
+        
+        .floor h2 {
+            color: #181818;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1a1a1a;
+        }
+        
+        .spaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .space {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .space:hover {
+            transform: scale(1.05);
+        }
+        
+        .space.available {
+            background: #28a745;
+            color: white;
+        }
+        
+        .space.occupied {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .space.maintenance {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .space-id {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .space-type {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2f2f2f, #2f2f2f);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> 👁️ Parking Space Visualization</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #28a745;"></div>
+                <span>Available</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #dc3545;"></div>
+                <span>Occupied</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffc107;"></div>
+                <span>Maintenance</span>
+            </div>
+        </div>
+        
+        <div th:each="floor : ${floorMap}" class="floor">
+            <h2>🏢 Floor <span th:text="${floor.key}"></span></h2>
+            
+            <div class="spaces-grid">
+                <div th:each="space : ${floor.value}" 
+                     th:class="${'space ' + #strings.toLowerCase(space.status)}">
+                    <div class="space-id" th:text="${space.spaceId}"></div>
+                    <div class="space-type">
+                        <span th:if="${space.compatibleVehicleType == T(com.parking.model.VehicleType).CAR}">🚗</span>
+                        <span th:if="${space.compatibleVehicleType == T(com.parking.model.VehicleType).MOTORCYCLE}">🏍️</span>
+                        <span th:if="${space.compatibleVehicleType == T(com.parking.model.VehicleType).TRUCK}">🚚</span>
+                    </div>
+                    <div class="space-type" th:if="${space.currentVehicle != null}" 
+                         th:text="${space.currentVehicle.licensePlate}"></div>
+                </div>
+            </div>
+        </div>
+        
+        <center>
+            <a href="/" class="back-link">← Back to Home</a>
+        </center>
+    </div>
+</body>
+</html>

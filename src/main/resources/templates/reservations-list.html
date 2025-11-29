@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Reservations - Parking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            color: #414141;
+            font-size: 2em;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3d3d3d 0%, #3d3d3d 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .cards-container {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .reservations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .reservation-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reservation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(135deg, #555555 0%, #555555 100%);
+        }
+        
+        .reservation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #555555;
+        }
+        
+        .reservation-id {
+            background: linear-gradient(135deg, #545454 0%, #545454 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .time-remaining {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .time-remaining strong {
+            color: #856404;
+            font-size: 1.1em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-bar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Active Reservations</h1>
+            <div>
+                <a href="/" class="btn btn-secondary">← Back</a>
+                <a href="/reserve" class="btn btn-primary">+ New Reservation</a>
+            </div>
+        </div>
+        
+        <div class="cards-container">
+            <div class="stats-bar" th:unless="${#lists.isEmpty(reservations)}">
+                <div class="stat-item">
+                    <div class="stat-value" th:text="${#lists.size(reservations)}">0</div>
+                    <div class="stat-label">Active Reservations</div>
+                </div>
+            </div>
+            
+            <div th:if="${#lists.isEmpty(reservations)}" class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <h2>No Active Reservations</h2>
+                <p>Create a new reservation to get started!</p>
+                <br>
+                <a href="/reserve" class="btn btn-primary">Make Reservation</a>
+            </div>
+            
+            <div th:unless="${#lists.isEmpty(reservations)}" class="reservations-grid">
+                <div th:each="res : ${reservations}" class="reservation-card">
+                    <div class="reservation-id" th:text="${res.reservationId}">R001</div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Customer:</span>
+                        <span class="value" th:text="${res.customer.name}">John Doe</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Contact:</span>
+                        <span class="value" th:text="${res.customer.contact}">+91 98765 43210</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Space:</span>
+                        <span class="value" th:text="${res.reservedSpace.spaceId}">F1-A-5</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Vehicle Type:</span>
+                        <span class="value">
+                            <span th:if="${res.vehicleType.name() == 'CAR'}">🚗 Car</span>
+                            <span th:if="${res.vehicleType.name() == 'MOTORCYCLE'}">🏍️ Motorcycle</span>
+                            <span th:if="${res.vehicleType.name() == 'TRUCK'}">🚚 Truck</span>
+                        </span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Created:</span>
+                        <span class="value" th:text="${#temporals.format(res.createdAt, 'dd/MM hh:mm a')}">18/10 02:30 PM</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Expires:</span>
+                        <span class="value" th:text="${#temporals.format(res.expiresAt, 'dd/MM hh:mm a')}">18/10 04:30 PM</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label">Status:</span>
+                        <span class="value">
+                            <span class="badge badge-active">✓ Active</span>
+                        </span>
+                    </div>
+                    
+                    <div class="time-remaining">
+                        ⏰ <strong th:text="${res.validityHours} + ' hours validity'">2 hours validity</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

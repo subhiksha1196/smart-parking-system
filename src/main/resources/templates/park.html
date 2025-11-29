@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Vehicle - Parking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #363636;
+        }
+        
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #2e2e2e, #2c2c2c);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .optional-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .info-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Park Vehicle</h1>
+        
+        <form action="/park-result" method="post">
+            <div class="form-group">
+                <label for="licensePlate">License Plate Number *</label>
+                <input type="text" id="licensePlate" name="licensePlate" 
+                       placeholder="Enter license plate (e.g., TN01AB1234)" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicleType">Vehicle Type *</label>
+                <select id="vehicleType" name="vehicleType" required>
+                    <option value="">Select vehicle type</option>
+                    <option value="CAR">🚗 Car</option>
+                    <option value="MOTORCYCLE">🏍️ Motorcycle</option>
+                    <option value="TRUCK">🚚 Truck</option>
+                </select>
+            </div>
+            
+            <div class="optional-section">
+                <div class="section-title">📋 Optional Information</div>
+                
+                <div class="form-group">
+                    <label for="contact">Contact Number (Guest)</label>
+                    <input type="tel" id="contact" name="contact" 
+                           placeholder="Enter contact number (optional)">
+                    <p class="info-text">For guests without customer account</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerId">Or Select Registered Customer</label>
+                    <select id="customerId" name="customerId">
+                        <option value="">-- None --</option>
+                        <option th:each="customer : ${customers}" 
+                                th:value="${customer.id}" 
+                                th:text="${customer.name + ' (' + customer.contact + ')'}">
+                            Customer Name (Contact)
+                        </option>
+                    </select>
+                    <p class="info-text">Select if customer is registered</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reservationId">Reservation ID (if any)</label>
+                    <input type="text" id="reservationId" name="reservationId" 
+                           placeholder="Enter reservation ID (optional)">
+                    <p class="info-text">Enter if you have a pre-booked reservation</p>
+                </div>
+            </div>
+            
+            <button type="submit">🎫 Generate Parking Ticket</button>
+        </form>
+        
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

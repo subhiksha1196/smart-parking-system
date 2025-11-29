@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exit Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .success {
+            color: #28a745;
+        }
+        
+        .error {
+            color: #dc3545;
+        }
+        
+        .emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 1.3em;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6c757d, #6c757d);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #8e979f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div th:if="${success}">
+            <div class="emoji">✅</div>
+            <h1 class="success">Vehicle Exited Successfully!</h1>
+            <div class="message">
+                <p><strong>Ticket ID:</strong> <span th:text="${ticketId}"></span></p>
+                <p style="margin-top: 15px;">Thank you for using our parking facility!</p>
+                <p style="color: #28a745; font-weight: 600; margin-top: 15px;">Payment processed successfully ✓</p>
+            </div>
+        </div>
+        
+        <div th:unless="${success}">
+            <div class="emoji">❌</div>
+            <h1 class="error">Exit Failed!</h1>
+            <div class="message">
+                <p>Ticket ID <strong th:text="${ticketId}"></strong> not found or already processed.</p>
+                <p style="margin-top: 15px;">Please check your ticket ID and try again.</p>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <a href="/exit" class="btn btn-secondary">Try Again</a>
+            <a href="/" class="btn btn-primary">Go Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Reservation - Parking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-box p {
+            color: #333;
+            margin: 5px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2a2a2a, #2a2a2a);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calendar-plus"></i> Make Reservation</h1>
+            <p style="color: #666;">Reserve a parking space in advance</p>
+        </div>
+        
+        <div class="info-box">
+            <p><i class="fas fa-info-circle"></i> <strong>Reservation Benefits:</strong></p>
+            <p>• Guaranteed parking space</p>
+            <p>• Valid for 1-24 hours</p>
+            <p>• Priority entry with reservation ID</p>
+        </div>
+        
+        <form action="/reserve-result" method="post">
+            <div class="form-group">
+                <label for="customerId">Select Customer <span class="required">*</span></label>
+                <select id="customerId" name="customerId" required>
+                    <option value="">-- Select Customer --</option>
+                    <option th:each="customer : ${customers}" 
+                            th:value="${customer.id}" 
+                            th:text="${customer.name + ' (ID: ' + customer.id + ')'}">
+                        Customer Name
+                    </option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicleType">Vehicle Type <span class="required">*</span></label>
+                <select id="vehicleType" name="vehicleType" required>
+                    <option value="">-- Select Vehicle Type --</option>
+                    <option value="CAR">🚗 Car</option>
+                    <option value="MOTORCYCLE">🏍️ Motorcycle</option>
+                    <option value="TRUCK">🚚 Truck</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="validityHours">Validity Duration (Hours) <span class="required">*</span></label>
+                <input type="number" id="validityHours" name="validityHours" 
+                       min="1" max="24" value="2" required>
+            </div>
+            
+            <button type="submit">
+                <i class="fas fa-check-circle"></i> Reserve Now
+            </button>
+        </form>
+        
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </div>
+</body>
+</html>

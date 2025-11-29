@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Tickets - Parking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .ticket-card {
+            background: linear-gradient(135deg, #616161, #616161);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .ticket-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        
+        .ticket-card p {
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+        
+        .ticket-card strong {
+            opacity: 0.8;
+        }
+        
+        .no-tickets {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-tickets .emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .no-tickets p {
+            font-size: 1.3em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2c2c2c, #2c2c2c);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎫 Active Parking Tickets</h1>
+        
+        <div th:if="${#lists.isEmpty(tickets)}" class="no-tickets">
+            <div class="emoji">📭</div>
+            <p>No active tickets found</p>
+            <p style="font-size: 1em; margin-top: 10px; color: #999;">All parking spaces are currently empty</p>
+        </div>
+        
+        <div th:unless="${#lists.isEmpty(tickets)}" class="ticket-grid">
+            <div th:each="ticket : ${tickets}" class="ticket-card">
+                <h3>🎫 <span th:text="${ticket.ticketId}"></span></h3>
+                <p><strong>License Plate:</strong> <span th:text="${ticket.vehicle.licensePlate}"></span></p>
+                <p><strong>Vehicle Type:</strong> <span th:text="${ticket.vehicle.type}"></span></p>
+                <p><strong>Contact:</strong> <span th:text="${ticket.vehicle.ownerContact}"></span></p>
+                <p><strong>Parking Space:</strong> <span th:text="${ticket.allocatedSpace.spaceId}"></span></p>
+                <p><strong>Floor:</strong> <span th:text="${ticket.allocatedSpace.floorId}"></span></p>
+                <p><strong>Entry Time:</strong> <span th:text="${#temporals.format(ticket.entryTime, 'dd-MM-yyyy HH:mm')}"></span></p>
+                <p><strong>Status:</strong> <span th:text="${ticket.status}"></span></p>
+            </div>
+        </div>
+        
+        <center>
+            <a href="/" class="back-link">← Back to Home</a>
+        </center>
+    </div>
+</body>
+</html>

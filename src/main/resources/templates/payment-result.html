@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt - Parking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .receipt {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-icon {
+            text-align: center;
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .error-icon {
+            text-align: center;
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .success h1 {
+            color: #27ae60;
+        }
+        
+        .error h1 {
+            color: #e74c3c;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .company-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .receipt-details {
+            margin: 25px 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .value {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .amount-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .total-amount {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .discount-badge {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .change-section {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .change-amount {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .loyalty-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .loyalty-points {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .footer-note {
+            text-align: center;
+            color: #999;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+            font-size: 0.9em;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button, a {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-print {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-print:hover {
+            background: #27ae60;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Success State -->
+        <div th:if="${success}" class="receipt success">
+            <div class="success-icon">✅</div>
+            <h1>Payment Successful!</h1>
+            
+            <div class="receipt-header">
+                <div class="company-name">🅿️ Smart Parking System</div>
+                <div style="color: #666;">Payment Receipt</div>
+            </div>
+            
+            <div class="receipt-details">
+                <div class="detail-row">
+                    <span class="label">Ticket ID:</span>
+                    <span class="value" th:text="${ticket.ticketId}">T001</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Vehicle:</span>
+                    <span class="value" th:text="${ticket.vehicle.licensePlate}">KA01AB1234</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Vehicle Type:</span>
+                    <span class="value" th:text="${ticket.vehicle.type}">CAR</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Parking Space:</span>
+                    <span class="value" th:text="${ticket.allocatedSpace.spaceId}">F1-A-5</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Entry Time:</span>
+                    <span class="value" th:text="${#temporals.format(ticket.entryTime, 'dd/MM/yyyy hh:mm a')}">18/10/2025 02:30 PM</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Exit Time:</span>
+                    <span class="value" th:text="${#temporals.format(ticket.exitTime, 'dd/MM/yyyy hh:mm a')}">18/10/2025 04:30 PM</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Duration:</span>
+                    <span class="value" th:text="${T(java.time.temporal.ChronoUnit).HOURS.between(ticket.entryTime, ticket.exitTime) + ' hours'}">2 hours</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Payment Method:</span>
+                    <span class="value" th:text="${ticket.paymentMethod}">CASH</span>
+                </div>
+            </div>
+            
+            <div class="amount-section">
+                <div class="detail-row" th:if="${discountApplied}">
+                    <span class="label">Discount Applied:</span>
+                    <span class="value">
+                        <span class="discount-badge">🎁 10% Loyalty Discount</span>
+                    </span>
+                </div>
+                <div class="total-amount">
+                    <span>Total Amount:</span>
+                    <span th:text="'₹' + ${#numbers.formatDecimal(amount, 1, 2)}">₹40.00</span>
+                </div>
+            </div>
+            
+            <!-- Change Section (only for cash) -->
+            <div th:if="${ticket.paymentMethod.name() == 'CASH' and change != null and change > 0}" 
+                 class="change-section">
+                <div style="color: #856404; margin-bottom: 5px;">Change to Return:</div>
+                <div class="change-amount" th:text="'₹' + ${#numbers.formatDecimal(change, 1, 2)}">₹10.00</div>
+            </div>
+            
+            <!-- Loyalty Points Section -->
+            <div th:if="${ticket.customer != null}" class="loyalty-section">
+                <div>🎉 Loyalty Points Earned</div>
+                <div class="loyalty-points" th:text="'+' + ${ticket.loyaltyPointsEarned}">+4</div>
+                <div style="font-size: 0.9em;">
+                    Total Points: <strong th:text="${ticket.customer.loyaltyPoints}">104</strong>
+                </div>
+                <div th:if="${ticket.customer.loyaltyPoints >= 100}" style="margin-top: 10px; font-size: 0.9em;">
+                    ✨ You've unlocked 10% discount on next visit!
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                Thank you for using our parking facility!<br>
+                Have a safe journey 🚗
+            </div>
+            
+            <div class="actions">
+                <a href="/" class="btn-secondary">Home</a>
+                <button onclick="window.print()" class="btn-print">🖨️ Print Receipt</button>
+                <a href="/park" class="btn-primary">Park Another</a>
+            </div>
+        </div>
+        
+        <!-- Error State -->
+        <div th:unless="${success}" class="receipt error">
+            <div class="error-icon">❌</div>
+            <h1>Payment Failed</h1>
+            
+            <div class="receipt-details">
+                <p style="text-align: center; color: #e74c3c; font-weight: 600; padding: 20px;">
+                    <span th:text="${message}">Error processing payment</span>
+                </p>
+            </div>
+            
+            <div class="actions">
+                <a href="/" class="btn-secondary">Home</a>
+                <a href="/exit" class="btn-primary">Try Again</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Parking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #616161;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .ticket-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .ticket-id {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #616161 ;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .fee-preview {
+            background: linear-gradient(135deg, #616161, #616161);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .fee-row:last-child {
+            border-bottom: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            padding-top: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .payment-option {
+            position: relative;
+        }
+        
+        .payment-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .payment-card {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .payment-option input:checked + .payment-card {
+            border-color: #616161;
+            background: #f0f4ff;
+        }
+        
+        .payment-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+        
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #616161;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .payment-details {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #616161 0%, #616161 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #1565C0;
+        }
+        
+        .discount-badge {
+            background: #2ecc71;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            display: inline-block;
+            margin-top: 5px;
+        }
+    </style>
+    <script>
+        function showPaymentDetails(method) {
+            document.querySelectorAll('.payment-details').forEach(el => el.style.display = 'none');
+            
+            if (method === 'CASH') {
+                document.getElementById('cashDetails').style.display = 'block';
+            } else if (method === 'CARD') {
+                document.getElementById('cardDetails').style.display = 'block';
+            } else if (method === 'UPI') {
+                document.getElementById('upiDetails').style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>💳 Process Payment</h1>
+            <p class="subtitle">Complete your parking payment</p>
+            
+            <div class="ticket-info">
+                <div class="ticket-id" th:text="'Ticket: ' + ${ticketId}">Ticket: T001</div>
+            </div>
+            
+            <!-- Fee Preview -->
+            <div class="fee-preview">
+                <h3 style="margin-bottom: 15px;">Payment Summary</h3>
+                <div class="fee-row">
+                    <span>Parking Duration:</span>
+                    <span th:text="${hours} + ' hours'">0 hours</span>
+                </div>
+                <div class="fee-row" th:if="${isWeekend}">
+                    <span>Weekend Surcharge:</span>
+                    <span>Applied ⚠️</span>
+                </div>
+                <div class="fee-row" th:if="${hasDiscount}">
+                    <span>Loyalty Discount:</span>
+                    <span class="discount-badge">10% OFF 🎉</span>
+                </div>
+                <div class="fee-row">
+                    <span>Total Amount:</span>
+                    <span th:text="'₹' + ${#numbers.formatDecimal(amount, 1, 2)}">₹0.00</span>
+                </div>
+            </div>
+            
+            <form th:action="@{/exit-result}" method="post">
+                <input type="hidden" name="ticketId" th:value="${ticketId}">
+                
+                <div class="form-group">
+                    <label>Select Payment Method <span class="required">*</span></label>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" name="paymentMethod" value="CASH" id="cash" 
+                                   onclick="showPaymentDetails('CASH')" required>
+                            <label for="cash" class="payment-card">
+                                <div class="payment-icon">💵</div>
+                                <div class="payment-name">Cash</div>
+                            </label>
+                        </div>
+                        
+                        <div class="payment-option">
+                            <input type="radio" name="paymentMethod" value="CARD" id="card" 
+                                   onclick="showPaymentDetails('CARD')" required>
+                            <label for="card" class="payment-card">
+                                <div class="payment-icon">💳</div>
+                                <div class="payment-name">Card</div>
+                            </label>
+                        </div>
+                        
+                        <div class="payment-option">
+                            <input type="radio" name="paymentMethod" value="UPI" id="upi" 
+                                   onclick="showPaymentDetails('UPI')" required>
+                            <label for="upi" class="payment-card">
+                                <div class="payment-icon">📱</div>
+                                <div class="payment-name">UPI</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cash Payment Details -->
+                <div id="cashDetails" class="payment-details">
+                    <div class="form-group">
+                        <label>Cash Received <span class="required">*</span></label>
+                        <input type="number" name="cashReceived" step="0.01" min="0" 
+                               th:attr="min=${amount}"
+                               placeholder="Enter amount received">
+                    </div>
+                </div>
+                
+                <!-- Card Payment Details -->
+                <div id="cardDetails" class="payment-details">
+                    <div class="form-group">
+                        <label>Card Number (Last 4 digits) <span class="required">*</span></label>
+                        <input type="text" name="paymentDetails" 
+                               placeholder="Enter last 4 digits" maxlength="4" pattern="[0-9]{4}">
+                    </div>
+                </div>
+                
+                <!-- UPI Payment Details -->
+                <div id="upiDetails" class="payment-details">
+                    <div class="form-group">
+                        <label>UPI ID / Transaction ID <span class="required">*</span></label>
+                        <input type="text" name="paymentDetails" 
+                               placeholder="Enter UPI ID or Transaction ID">
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='/'">Cancel</button>
+                    <button type="submit" class="btn-primary">Process Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
