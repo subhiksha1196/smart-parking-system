@@ -2,6 +2,10 @@
 
 A comprehensive web-based parking management system built with Spring Boot that streamlines parking operations, customer management, and revenue tracking.
 
+![Version](https://img.shields.io/badge/version-1.0-brightgreen)
+![Java](https://img.shields.io/badge/Java-17+-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
+
 ## Table of Contents
 
 - [Features](#features)
