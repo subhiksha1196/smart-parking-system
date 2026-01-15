@@ -6,6 +6,22 @@ A comprehensive web-based parking management system built with Spring Boot that 
 ![Java](https://img.shields.io/badge/Java-17+-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
 
+Screenshots
+Main Dashboard
+<img src="screenshots/main-page.png" alt="Main Dashboard" width="500">
+Customer Registration
+<img src="screenshots/register.png" alt="Customer Registration" width="500">
+Park Vehicle
+<img src="screenshots/park.png" alt="Park Vehicle" width="500">
+Make Reservation
+<img src="screenshots/reservation.png" alt="Make Reservation" width="500">
+Exit & Payment
+<img src="screenshots/exit.png" alt="Exit & Payment" width="500">
+Visual Parking Lot
+<img src="screenshots/visualise.png" alt="Visual Parking Lot" width="500">
+Reports & Analytics
+<img src="screenshots/report.png" alt="Reports & Analytics" width="500">
+
 ## Table of Contents
 
 - [Features](#features)
