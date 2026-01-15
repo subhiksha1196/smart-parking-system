@@ -6,21 +6,28 @@ A comprehensive web-based parking management system built with Spring Boot that 
 ![Java](https://img.shields.io/badge/Java-17+-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)
 
-Screenshots
-Main Dashboard
-<img src="screenshots/main-page.png" alt="Main Dashboard" width="500">
-Customer Registration
-<img src="screenshots/register.png" alt="Customer Registration" width="500">
-Park Vehicle
-<img src="screenshots/park.png" alt="Park Vehicle" width="500">
-Make Reservation
-<img src="screenshots/reservation.png" alt="Make Reservation" width="500">
-Exit & Payment
-<img src="screenshots/exit.png" alt="Exit & Payment" width="500">
-Visual Parking Lot
-<img src="screenshots/visualise.png" alt="Visual Parking Lot" width="500">
-Reports & Analytics
-<img src="screenshots/report.png" alt="Reports & Analytics" width="500">
+## Screenshots
+
+### Main Dashboard
+<img src="screenshots/main-page.png" alt="Main Dashboard" width="700">
+
+### Customer Registration
+<img src="screenshots/register.png" alt="Customer Registration" width="700">
+
+### Park Vehicle
+<img src="screenshots/park.png" alt="Park Vehicle" width="700">
+
+### Make Reservation
+<img src="screenshots/reservation.png" alt="Make Reservation" width="700">
+
+### Exit & Payment
+<img src="screenshots/exit.png" alt="Exit & Payment" width="700">
+
+### Visual Parking Lot
+<img src="screenshots/visualise.png" alt="Visual Parking Lot" width="700">
+
+### Reports & Analytics
+<img src="screenshots/report.png" alt="Reports & Analytics" width="700">
 
 ## Table of Contents
 
@@ -125,6 +132,7 @@ src/main/
 │   │   ├── visualize.html                 # Visual parking lot
 │   │   └── error.html                     # Error page
 │   └── application.properties             # Application configuration
+├── screenshots/                            # Application screenshots
 └── pom.xml                                 # Maven dependencies
 ```
 
@@ -248,6 +256,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
 ## Contact
 
 For any queries or suggestions, please reach out to:
@@ -255,6 +267,5 @@ For any queries or suggestions, please reach out to:
 - Project Link: [GitHub](https://github.com/subhiksha1196/smart-parking-system)
 
 ---
-
 
 ⭐ Star this repo if you find it helpful!
